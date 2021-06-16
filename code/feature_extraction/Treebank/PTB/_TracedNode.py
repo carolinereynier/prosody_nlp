@@ -1,4 +1,4 @@
-from _PTBNode import PTBNode
+from ._PTBNode import PTBNode
 
 class TracedNode(PTBNode):
     """

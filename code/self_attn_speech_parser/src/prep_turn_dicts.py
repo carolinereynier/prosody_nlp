@@ -4,10 +4,10 @@ from prep_input_dicts import times2frames,norm_energy_by_side
 import numpy as np
 
 # 0. Set paths
-data_dir = '/afs/inf.ed.ac.uk/group/project/prosody/prosody_nlp/data/input_features/'
+data_dir = '/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/output_data/input_features/'
 sent_dir = os.path.join(data_dir,'sentence_pause_dur_fixed')
 turn_dir = os.path.join(data_dir,'turn_pause_dur_fixed')
-kaldi_feat_dir = '/afs/inf.ed.ac.uk/group/project/prosody/prosody_nlp/data/kaldi_feats/'
+kaldi_feat_dir = '/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/new_output/'
 fbank_dir = os.path.join(kaldi_feat_dir,'swbd_fbank_energy')
 pitchpov_dir = os.path.join(kaldi_feat_dir,'swbd_pitch_pov')
 
@@ -98,7 +98,7 @@ for turn in multisent_turns:
     sents = turn2sent[turn]
 
     conv,spk,_ = sents[0].split('_')
-    
+
     # 6a. Create features you can concatenate from sent features
     pauses = {'pause_bef':[],
               'pause_aft':[]}
@@ -126,10 +126,10 @@ for turn in multisent_turns:
     normed_by_max = np.expand_dims(raw_durs/np.max(raw_durs),axis=0)
     print(normed_by_max)
     print(np.max(raw_durs))
-    
+
 
     turn2dur[turn] = np.concatenate([normed_by_mean,normed_by_max],axis=0)
-    
+
 
     # 6b. Create features you have to recalculate
     ssent = sents[0]
@@ -191,8 +191,7 @@ with open(os.path.join(sent_dir,f'multisent_{split}_sent_ids.txt'),'w') as f_id_
                     else:
                         f_id_multi.write(sent+'\n')
                         f_tree_multi.write(sent2tree[sent]+'\n')
-                        
-            
-            
-print('Done.')
 
+
+
+print('Done.')

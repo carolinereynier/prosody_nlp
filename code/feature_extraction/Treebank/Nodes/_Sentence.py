@@ -1,7 +1,7 @@
 import nltk.corpus
 
-from _Node import Node
-from _Printer import Printer
+from ._Node import Node
+from ._Printer import Printer
 
 
 class Sentence(Node):
@@ -13,8 +13,8 @@ class Sentence(Node):
         """
         Raises an error, because the root node has no parent
         """
-        raise AttributeError, "Cannot retrieve the parent of the root node! Current parse state:\n\n%s" % self.prettyPrint()
-        
+        raise(AttributeError, "Cannot retrieve the parent of the root node! Current parse state:\n\n%s" % self.prettyPrint())
+
     def performOperation(self, operation):
         """
         Accept a Visitor and call it on each child
@@ -72,10 +72,10 @@ class Sentence(Node):
             try:
                 parent = nodes[parentage[key]]
             except:
-                print 'hi'
-                print key
-                print node
-                print parentage
-                print nodes
+                print('hi')
+                print(key)
+                print(node)
+                print(parentage)
+                print(nodes)
                 raise
             parent.attachChild(node, len(parent))

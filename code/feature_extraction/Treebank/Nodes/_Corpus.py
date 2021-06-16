@@ -1,16 +1,16 @@
 import sys
 
-from _Node import Node
-from _File import File
-from _Sentence import Sentence
+from ._Node import Node
+from ._File import File
+from ._Sentence import Sentence
 
 class Corpus(Node):
     def parent(self):
         """
         Raises an error, because the root node has no parent
         """
-        raise AttributeError, "Cannot retrieve the parent of the root node. Current parse state:\n\n%s" % self.prettyPrint()
-        
+        raise(AttributeError, "Cannot retrieve the parent of the root node. Current parse state:\n\n%s" % self.prettyPrint())
+
     def attachChild(self, newChild):
         """
         Append a file
@@ -39,7 +39,7 @@ class Corpus(Node):
         try:
             return self.fileClass(path=path)
         except KeyError:
-            print "Parse error!"
+            print("Parse error!")
             raise
      
     

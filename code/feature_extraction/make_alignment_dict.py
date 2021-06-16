@@ -7,14 +7,18 @@ import sys
 sys.setrecursionlimit(100000)
 
 nxt_dir = '/group/corporapublic/switchboard/nxt/xml/'
-mstate_dir = '/afs/inf.ed.ac.uk/group/project/prosody/parsing/prosody_nlp/data/swb_ms98_transcriptions'
+mstate_dir = '/afs/inf.ed.ac.uk/group/corpora/large/switchboard/switchboard1/transcriptions/swb_ms98_transcriptions'
+out_dir = "/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/swbd_word_times"
+
+#nxt_dir = '/group/corporapublic/switchboard/nxt/xml/'
+#mstate_dir = '/afs/inf.ed.ac.uk/group/project/prosody/parsing/prosody_nlp/data/swb_ms98_transcriptions'
 
 pw_dir = os.path.join(nxt_dir,'phonwords')
 phone_dir = os.path.join(nxt_dir,'phones')
 syll_dir = os.path.join(nxt_dir,'syllables')
 
 #out_dir = '/afs/inf.ed.ac.uk/group/project/prosody/parsing/prosody_nlp/data/swbd_word_times'
-out_dir = '/afs/inf.ed.ac.uk/group/project/prosody/parsing/prosody_nlp/data/swbd_word_times/tree_aligned/'
+#out_dir = '/afs/inf.ed.ac.uk/group/project/prosody/parsing/prosody_nlp/data/swbd_word_times/tree_aligned/'
 
 non_pw = ['[silence]','[noise]','[laughter]','[vocalized-noise]','<b_aside>','<e_aside>']
 
@@ -35,22 +39,22 @@ def find_ids_in_range(href_ids,conv):
 def flatten_list(lst):
     return [item for sublist in lst for item in sublist]
 
-for pw_file in ['sw3796.A.phonwords.xml']:#os.listdir(pw_dir):
+for pw_file in os.listdir(pw_dir):#['sw3796.A.phonwords.xml']:#os.listdir(pw_dir):
 
     pw_dict = {} # Make one dict per conversation/speaker pair.
 
     ph2info = {} # Dictionaries to make on the way:
-    syll2phon = {} 
+    syll2phon = {}
     pw2syll = {}
     pw2phon = {}
-    
+
     conv,spk,_,_ = pw_file.split('.')
     print(conv,spk)
 
     outfile = os.path.join(out_dir,'word_times_'+conv+spk+'.pickle')
     #if os.path.exists(outfile):
     #    continue
-    
+
     # Open phones file
     phone_file = conv+'.'+spk+'.'+'phones.xml'
     phone_filepath = os.path.join(phone_dir,phone_file)
@@ -97,7 +101,7 @@ for pw_file in ['sw3796.A.phonwords.xml']:#os.listdir(pw_dir):
         end = float(end)
         if not orth in non_pw: # discard silences and noises etc
             corrected_times.append((orth,start,end))
-        
+
 
     print('loaded syll and msstate files')
     # Open up phonwords file
@@ -106,7 +110,7 @@ for pw_file in ['sw3796.A.phonwords.xml']:#os.listdir(pw_dir):
     pw_contents = pw_f.read()
     pw_soup = BeautifulSoup(pw_contents,'lxml')
     pws = pw_soup.find_all('phonword')
-   
+
     for i,pw in enumerate(pws):
         pw_id = conv+'_'+pw['nite:id']
         start = float(pw['nite:start'])
@@ -144,7 +148,7 @@ for pw_file in ['sw3796.A.phonwords.xml']:#os.listdir(pw_dir):
         corrected_end = corrected_times[i][2]
         corrected_orth = corrected_times[i][0]
 
-        
+
         if orth==corrected_orth:
             start = corrected_start
             end = corrected_end
@@ -161,10 +165,7 @@ for pw_file in ['sw3796.A.phonwords.xml']:#os.listdir(pw_dir):
                    'phones':phones}
         print(pw_info)
         pw_dict[pw_id] = pw_info
-        
+
     print(outfile)
     with open(outfile,'wb') as f:
         pickle.dump(pw_dict,f,protocol=2)
-
-    
-

@@ -1,4 +1,4 @@
-from _Node import Node
+from ._Node import Node
 
 class File(Node):
     """

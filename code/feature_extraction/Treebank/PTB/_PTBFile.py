@@ -1,7 +1,7 @@
-from Treebank.Nodes import File
-from _PTBNode import PTBNode
-from _PTBSentence import PTBSentence
-from _PTBLeaf import PTBLeaf
+from Nodes import File
+from ._PTBNode import PTBNode
+from ._PTBSentence import PTBSentence
+from ._PTBLeaf import PTBLeaf
 
 import os.path
 from xml.etree import cElementTree as etree

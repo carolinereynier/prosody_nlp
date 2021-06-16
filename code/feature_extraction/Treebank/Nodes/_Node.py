@@ -29,8 +29,8 @@ class Node(object):
             lookup[n] = True
         assert not newParent in lookup
         self._detachFromParent()
-    	newParent.attachChild(self, index)
-        
+        newParent.attachChild(self, index)
+
     def attachChild(self, newChild, index = None):
         """
         Attach a (parentless) child. If the child has a parent
@@ -39,8 +39,8 @@ class Node(object):
         # Don't allow bidirectional parenthood
         assert not self is newChild
         if newChild.parent():
-            raise AttachmentError('Cannot attach node: %s to: %s Node is already attached to %s' \
-            % (newChild.prettyPrint(), self.prettyPrint(), newChild.parent().prettyPrint()))
+            raise(AttachmentError('Cannot attach node: %s to: %s Node is already attached to %s' \
+            % (newChild.prettyPrint(), self.prettyPrint(), newChild.parent().prettyPrint())))
         if index == None:
             if not self._children:
                 self._children.append(newChild)

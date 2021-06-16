@@ -1,4 +1,4 @@
-from _Printer import Printer
+from ._Printer import Printer
 
 class PropbankPrinter(Printer):
     """

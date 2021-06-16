@@ -10,11 +10,15 @@
 # conf/queue.conf in http://kaldi-asr.org/doc/queue.html for more information,
 # or search for the string 'default_config' in utils/queue.pl or utils/slurm.pl.
 
-export train_cmd="queue.pl"
-export decode_cmd="queue.pl --mem 4G"
-export mkgraph_cmd="queue.pl --mem 8G"
-export cuda_cmd="queue.pl --gpu 1"
+#export train_cmd="queue.pl"
+#export decode_cmd="queue.pl --mem 4G"
+#export mkgraph_cmd="queue.pl --mem 8G"
+#export cuda_cmd="queue.pl --gpu 1"
 
+export train_cmd="queue.pl --max-jobs-run 1"
+export decode_cmd="queue.pl --max-jobs-run 1"
+export cuda_cmd="queue.pl --max-jobs-run 1"
+export mkgraph_cmd="queue.pl --max-jobs-run 1"
 
 # the rest of this file is present for historical reasons.  it's better to
 # create and edit conf/queue.conf for cluster-specific configuration.

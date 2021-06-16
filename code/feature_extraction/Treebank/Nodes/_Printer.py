@@ -1,4 +1,4 @@
-import Treebank.Nodes
+import Nodes
 
 class Printer(object):
     """
@@ -9,13 +9,13 @@ class Printer(object):
         return self.actOn(node)
     
     def actOn(self, node):
-        if isinstance(node, Treebank.Nodes.Sentence):
+        if isinstance(node, Nodes.Sentence):
             return self._visitRoot(node)
         else:
             raise Break
     
     def _isLeaf(self, node):
-        if isinstance(node, Treebank.Nodes.Leaf):
+        if isinstance(node, Nodes.Leaf):
             return True
         else:
             return False

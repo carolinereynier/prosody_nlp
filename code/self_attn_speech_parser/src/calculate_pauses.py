@@ -18,7 +18,7 @@ def get_pauses(info, sorted_keys):
             pause_before[pw] = np.nan
         else:
             prev = sorted_keys[i-1]
-            if prev==pw: # EDIT: if the previous word is the same phonword, then there is no gap. 
+            if prev==pw: # EDIT: if the previous word is the same phonword, then there is no gap.
                 pause_before[pw] = 0
             else:
                 pause_before[pw] = info[pw]['start_time'] - info[prev]['end_time']
@@ -26,7 +26,7 @@ def get_pauses(info, sorted_keys):
             pause_after[pw] = np.nan
         else:
             follow = sorted_keys[i+1]
-            if follow==pw:  # EDIT: if the next word is the same phonword, then there is no gap. 
+            if follow==pw:  # EDIT: if the next word is the same phonword, then there is no gap.
                 pause_after[pw]=0
             else:
                 pause_after[pw] = info[follow]['start_time'] - info[pw]['end_time']
@@ -37,25 +37,25 @@ if __name__=="__main__":
     splits = ['train','dev','test']
 
     for split in splits:
-        sent_f = f'/afs/inf.ed.ac.uk/group/project/prosody/prosody_nlp/data/input_features/sentence/{split}_sent_ids.txt'
+        sent_f = f'/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/output_data/input_features/sentence/{split}_sent_ids.txt'
         sent_ids = [l.strip() for l in open(sent_f,'r').readlines()]
-        term2pw_path = f'/afs/inf.ed.ac.uk/group/project/prosody/prosody_nlp/data/input_features/term2pw.pickle'
+        term2pw_path = f'/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/output_data/input_features/sentence2/term2pw.pickle'
 
         term2pw = pickle.load(open(term2pw_path,'rb'))
         mapped_pws = term2pw.values()
         mapped_pws = set(mapped_pws)
-    
+
         convs = sorted(list(set([sent.split('_')[0].replace('sw','') for sent in sent_ids])))
 
         all_before = {}
         all_after = {}
-    
+
         for conv in convs:
             print(conv)
             word_times = {}
 
-            wt_file_A = f'/afs/inf.ed.ac.uk/group/project/prosody/prosody_nlp/data/swbd_word_times/word_times_sw{conv}A.pickle'
-            wt_file_B = f'/afs/inf.ed.ac.uk/group/project/prosody/prosody_nlp/data/swbd_word_times/word_times_sw{conv}B.pickle'
+            wt_file_A = f'/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/swbd_word_times/tree_aligned/word_times_sw{conv}A.pickle'
+            wt_file_B = f'/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/swbd_word_times/tree_aligned/word_times_sw{conv}B.pickle'
             A_word_times = pickle.load(open(wt_file_A,'rb'))
             B_word_times = pickle.load(open(wt_file_B,'rb'))
 
@@ -64,7 +64,7 @@ if __name__=="__main__":
             # NEXT sort all pws and drop any that aren't mapped to terms
             sorted_pws = sort_pws(word_times,mapped_pws)
             pause_before,pause_after = get_pauses(word_times,sorted_pws)
-            
+
             all_before = {**all_before,**pause_before}
             all_after = {**all_after,**pause_after}
 
@@ -74,8 +74,6 @@ if __name__=="__main__":
             pw2pause[pw]['pause_before'] = all_before[pw]
             pw2pause[pw]['pause_after'] = all_after[pw]
 
-        outfile = f'/afs/inf.ed.ac.uk/group/project/prosody/prosody_nlp/data/input_features/sentence2/{split}_pw2pause.pickle'
+        outfile = f'/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/output_data/input_features/sentence2/{split}_pw2pause.pickle'
         with open(outfile,'wb') as f:
             pickle.dump(pw2pause,f)
-
-

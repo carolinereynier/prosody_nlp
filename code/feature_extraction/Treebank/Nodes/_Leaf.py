@@ -1,4 +1,4 @@
-from _Node import Node
+from ._Node import Node
 
 class Leaf(Node):
     """
@@ -12,8 +12,8 @@ class Leaf(Node):
         return True
     
     def attachChild(self, newChild, index = None):
-        raise AttachmentError, "Cannot add node\n\n%s\n\nto leaf:\n\n%s\n\nLeaves cannot have children." \
-        % (newChild.prettyPrint(), self.prettyPrint())
+        raise(AttachmentError, "Cannot add node\n\n%s\n\nto leaf:\n\n%s\n\nLeaves cannot have children." \
+        % (newChild.prettyPrint(), self.prettyPrint()))
 
     def length(self, constraint = None):
         return 0
@@ -22,14 +22,14 @@ class Leaf(Node):
         """
         Raises an error, because leaf nodes have no children
         """
-        raise AttributeError, "Cannot retrieve children from leaf nodes! Attempted on leaf:\n\n%s" % self.prettyPrint()
-        
+        raise(AttributeError, "Cannot retrieve children from leaf nodes! Attempted on leaf:\n\n%s" % self.prettyPrint())
+
     def detachChild(self, node):
         """
         Raises an error, because leaf nodes have no children
         """
-        raise AttributeError, "Cannot remove children from leaf nodes! Attempted on leaf:\n\n%s" % self.prettyPrint()
-        
+        raise(AttributeError, "Cannot remove children from leaf nodes! Attempted on leaf:\n\n%s" % self.prettyPrint())
+
     def prettyPrint(self):
         return "(%s %s)" % (self.label, self.text) 
     

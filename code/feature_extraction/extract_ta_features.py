@@ -10,12 +10,14 @@ import numpy as np
 import pickle
 
 # constants
-
+#pitch_pov_dir = '/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/new_output/swbd_pitch_pov'
 pitch_pov_dir = '/afs/inf.ed.ac.uk/group/project/prosody/prosody_nlp/data/kaldi_feats/swbd_pitch_pov' # Kaldi features
+
+#fbank_dir= '/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/new_output/swbd_fbank_energy'
 fbank_dir = '/afs/inf.ed.ac.uk/group/project/prosody/prosody_nlp/data/kaldi_feats/swbd_fbank_energy'
 
 OTHER = ["[silence]", "[noise]", "[laughter]", "[vocalized-noise]"]
-vowels = ['aa', 'iy', 'eh', 'el', 'ah', 'ao', 'ih', 'en', 'ey', 'aw', 
+vowels = ['aa', 'iy', 'eh', 'el', 'ah', 'ao', 'ih', 'en', 'ey', 'aw',
 'ay', 'ax', 'er','oy','ow', 'ae', 'uw']
 
 freq_thresh = 20 # threshold for frequent words
@@ -42,14 +44,14 @@ split_set = set(set(split2_info.keys()) | set(split3_info.keys()))
 # previous (NXT) skipped files:
 # skip_files = ['3655_{A,B}', '3796_{A,B}', '3798_{A,B}', '4379_{A,B}']
 # Files with switched turns
-switched = set([2010, 2027, 2072, 2073, 2130, 2171, 2177, 2247, 2279, 2290, 
-        2305, 2366, 2372, 2405, 2434, 2485, 2501, 2521, 2527, 2533, 2539, 
-        2566, 2593, 2617, 2627, 2658, 2789, 2792, 2858, 2913, 2932, 2970, 
-        3012, 3040, 3088, 3096, 3130, 3131, 3138, 3140, 3142, 3144, 3146, 
+switched = set([2010, 2027, 2072, 2073, 2130, 2171, 2177, 2247, 2279, 2290,
+        2305, 2366, 2372, 2405, 2434, 2485, 2501, 2521, 2527, 2533, 2539,
+        2566, 2593, 2617, 2627, 2658, 2789, 2792, 2858, 2913, 2932, 2970,
+        3012, 3040, 3088, 3096, 3130, 3131, 3138, 3140, 3142, 3144, 3146,
         3148, 3154,
-        2006, 2064, 2110, 2235, 2262, 2292, 2303, 2339, 2476, 2514, 2543, 
-        2576, 2616, 2631, 2684, 2707, 2794, 2844, 2854, 2930, 2954, 2955, 
-        2960, 2963, 2968, 2981, 2983, 2994, 2999, 3000, 3013, 3018, 3039, 
+        2006, 2064, 2110, 2235, 2262, 2292, 2303, 2339, 2476, 2514, 2543,
+        2576, 2616, 2631, 2684, 2707, 2794, 2844, 2854, 2930, 2954, 2955,
+        2960, 2963, 2968, 2981, 2983, 2994, 2999, 3000, 3013, 3018, 3039,
         3050, 3061, 3077, 3136, 3143, 3405])
 
 def pause2cat(p):
@@ -80,7 +82,7 @@ def need_split(word):
         if temp_splits[1] in split1_tails:
             return True
         if temp_splits[1] in split2_tails and temp_splits[0][-1]=='n':
-            if word not in ["-n't", "n't"]: 
+            if word not in ["-n't", "n't"]:
                 return True
     return False
 
@@ -128,19 +130,19 @@ def preprocess_cnn_feats(file_id, speaker, file_info):
             'sw{0}-{1}.pickle'.format(file_id, speaker))
     fbank_file = os.path.join(fbank_dir, \
             'sw{0}-{1}.pickle'.format(file_id, speaker))
-     
+
     data_pitch_pov = pickle.load(open(pitch_pov_file))
     pitch_povs = data_pitch_pov.values()[0]
-             
+
     data_fbank = pickle.load(open(fbank_file))
     fbanks = data_fbank.values()[0]
-    
+
     if len(pitch_povs) != len(fbanks):
         print("Length mismatch: ", len(pitch_povs), len(fbanks))
         choose_len = min(len(pitch_povs), len(fbanks))
         pitch_povs = pitch_povs[:choose_len]
         fbanks = fbanks[:choose_len]
-    
+
     exp_fbank = np.exp(fbanks).T
     stimes = []
     etimes = []
@@ -150,7 +152,7 @@ def preprocess_cnn_feats(file_id, speaker, file_info):
         v = file_info[pw]
         stimes.append(v['start_time'])
         etimes.append(v['end_time'])
-      
+
     sframes = [int(np.floor(x*100)) for x in stimes]
     eframes = [int(np.ceil(x*100)) for x in etimes]
 
@@ -175,7 +177,7 @@ def preprocess_cnn_feats(file_id, speaker, file_info):
                 #print(len(fb_frames))
                 #print(turn_fb.shape)
             else:
-                fb_frames = fbanks[sframes[i]-1:eframes[i]+1]            
+                fb_frames = fbanks[sframes[i]-1:eframes[i]+1]
                 #import pdb;pdb.set_trace()
             #print("len(sframes)",len(sframes))
             #print("len(eframes)",len(eframes))
@@ -198,7 +200,7 @@ def preprocess_cnn_feats(file_id, speaker, file_info):
     pitch3 = np.array(pitch_povs).T
     pitch3_energy = np.vstack([pitch3, energy])
     return pitch3_energy
-   
+
 # Get normalized word and rhyme durations
 def process_ph_list(word_id, lookup, flat_phones, phone_dict):
     word_freq = lookup[word_id][0] if word_id in lookup else 0
@@ -213,7 +215,7 @@ def process_ph_list(word_id, lookup, flat_phones, phone_dict):
     if word_freq > freq_thresh:
         mu_word = lookup[word_id][1]
     else:
-        mu_word = sum([phone_dict[x][1] for x in phones]) 
+        mu_word = sum([phone_dict[x][1] for x in phones])
     word_norms = min(raw_dur / mu_word, 5.0)
     rhyme_norms = min(raw_rhyme_dur / mu_rhyme, 5.0)
     return word_norms, rhyme_norms
@@ -244,12 +246,12 @@ def get_word_norms(word_id, ph_list, dictionaries):
         rhyme_norms = [head_rn, tail_rn]
     return word_norms, rhyme_norms
 
-# slice speech features 
+# slice speech features
 def get_word_cnns(pw, ph_range, raw_cnn_feats):
     # print pw
     start_time = ph_range[0][1]
     end_time = ph_range[-1][-1]
-    start_frame = int(np.floor(start_time*100)) 
+    start_frame = int(np.floor(start_time*100))
     end_frame = int(np.ceil(end_time*100))
 
     # empty for some reason: return all zeros
@@ -276,7 +278,7 @@ def get_word_cnns(pw, ph_range, raw_cnn_feats):
             mask = np.zeros(raw_count, dtype=bool)
             include = range(start_frame, end_frame)[::extra_ratio]
             include = [x-start_frame for x in include]
-            if len(include) > fixed_word_length: 
+            if len(include) > fixed_word_length:
                 # still too many frames, delete from 2 ends with skips
                 num_current = len(include)
                 sub_extra = num_current - fixed_word_length
@@ -287,7 +289,7 @@ def get_word_cnns(pw, ph_range, raw_cnn_feats):
                     idx = 2*i + 1
                     not_include.append(include[-idx])
                 for i in range(left):
-                    idx = 2*i 
+                    idx = 2*i
                     not_include.append(include[idx])
                 for ni in not_include:
                     include.remove(ni)
@@ -323,9 +325,9 @@ def get_pauses(info, sorted_keys):
 
 # NOTE: regarding switched turns:
 # The way it's set up right now is actually ok
-# In all udio files: 
+# In all udio files:
 # fbank_A contains features of left channel; fbank_B of right channel
-# in info files from Vicky: text match left/right channel even though name of 
+# in info files from Vicky: text match left/right channel even though name of
 # token ids are switched
 def extract_features(file_id, speaker, data_dir, out_dir, dictionaries):
     in_file = os.path.join(data_dir, \
@@ -333,7 +335,7 @@ def extract_features(file_id, speaker, data_dir, out_dir, dictionaries):
     info = pickle.load(open(in_file))
     sorted_keys = sort_keys(info.keys())
 
-    feat_dict = collections.defaultdict(dict) 
+    feat_dict = collections.defaultdict(dict)
     pause_before, pause_after = get_pauses(info, sorted_keys)
     raw_cnn_feats = preprocess_cnn_feats(file_id, speaker, info)
 
@@ -351,7 +353,7 @@ def extract_features(file_id, speaker, data_dir, out_dir, dictionaries):
         feat_dict[pw]['raw_text'] = raw_word
         flat_phones = zip(v['phones'], v['phone_start_times'], \
                 v['phone_end_times'])
-        
+
         if len(flat_phones) < 2 and need_split(word):
             print(word)
             print(flat_phones)
@@ -383,11 +385,11 @@ def extract_features(file_id, speaker, data_dir, out_dir, dictionaries):
                     ph_list = [head, tail]
                 else:
                     ph_list = [flat_phones]
-                
+
                     # DEBUG PRINTS
-        #print pw, raw_word, word 
+        #print pw, raw_word, word
         #print "\t", [x[0] for x in ph_list[0]], [x[0] for x in ph_list[-1]]
-         
+
         # word duration features
         print(ph_list)
         if ph_list:
@@ -401,7 +403,7 @@ def extract_features(file_id, speaker, data_dir, out_dir, dictionaries):
         else:
             feat_dict[pw]['word_norm'] = None
             feat_dict[pw]['rhyme_norm'] = None
-            
+
 
         # pause features
         if len(ph_list)==1:
@@ -410,7 +412,7 @@ def extract_features(file_id, speaker, data_dir, out_dir, dictionaries):
         else:
             feat_dict[pw]['pause_before'] = [pause_before[pw], 0.0]
             feat_dict[pw]['pause_after'] = [0.0, pause_after[pw]]
-        
+
         # cnn features
         cnn_feats = []
         if ph_list:
@@ -424,7 +426,7 @@ def extract_features(file_id, speaker, data_dir, out_dir, dictionaries):
                 feat_dict[pw]['cnn_feats'] = None
         else:
             feat_dict[pw]['cnn_feats'] = None
-            
+
     pickle_file = os.path.join(out_dir, \
             'sw{0}{1}.features'.format(file_id, speaker))
     print(pickle_file)
@@ -434,11 +436,10 @@ def extract_features(file_id, speaker, data_dir, out_dir, dictionaries):
 if __name__ == '__main__':
     pa = argparse.ArgumentParser(description='Extract prosodic features')
     pa.add_argument('--input_dir', help='input directory', \
-        default='/g/ssli/projects/disfluencies/forced_alignments')
-    pa.add_argument('--data_type', help='treebank or ms', \
-        default='tree_aligned')
+        default='/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/swbd_word_times')
+    pa.add_argument('--data_type', help='treebank or ms', default='tree_aligned')
     pa.add_argument('--output_dir', help='output directory', \
-        default='/s0/ttmt001/speech_parsing/ta_features')
+        default='/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/ta_stats')
     pa.add_argument('--file_id', help='swbd conversation id', \
         type=int, default=2005)
     pa.add_argument('--speaker', help='speaker side', \
@@ -468,5 +469,3 @@ if __name__ == '__main__':
             speaker = fname[-1]
             extract_features(file_id, speaker, data_dir, output_dir, \
                     dictionaries)
-
-

@@ -24,7 +24,7 @@ split2_info = {
 split3_info = {"cannot": ["ca", "not"]}
 split_set = set(split2_info.keys() + split3_info.keys())
 
-vowels = ['aa', 'iy', 'eh', 'el', 'ah', 'ao', 'ih', 'en', 'ey', 'aw', 
+vowels = ['aa', 'iy', 'eh', 'el', 'ah', 'ao', 'ih', 'en', 'ey', 'aw',
 'ay', 'ax', 'er','oy','ow', 'ae', 'uw']
 
 def process_head_tail_cases(info):
@@ -36,17 +36,18 @@ def process_head_tail_cases(info):
     phone_ends = info['phone_end_times']
     phone_starts = info['phone_start_times']
     if word in split3_info:
-        head_time = phone_ends[:-3][-1] - phone_starts[:-3][0] 
+        head_time = phone_ends[:-3][-1] - phone_starts[:-3][0]
         tail_time = phone_ends[-3:][-1] - phone_starts[-3:][0]
         head_id, tail_id = split3_info[word]
     elif word in split2_info:
-        head_time = phone_ends[:-2][-1] - phone_starts[:-2][0] 
+        head_time = phone_ends[:-2][-1] - phone_starts[:-2][0]
         tail_time = phone_ends[-2:][-1] - phone_starts[-2:][0]
         head_id, tail_id = split2_info[word]
     #if word in split1_info:
     elif temp_splits[1] in split1_tails:
         try:
             head_time = phone_ends[:-1][-1] - phone_starts[:-1][0]
+            tail_time = phone_ends[-1:][-1] - phone_starts[-1:][0]
         except:
             print('split1_tails: cant get head_time -- setting to 0')
             print(phone_starts)
@@ -63,6 +64,7 @@ def process_head_tail_cases(info):
     elif temp_splits[1] in split2_tails:
         try:
             head_time = phone_ends[:-2][-1] - phone_starts[:-2][0]
+            tail_time = phone_ends[-2:][-1] - phone_starts[-2:][0]
         except:
             print('split2_tails: cant get head_time -- setting to 0')
             print(phone_starts)
@@ -88,7 +90,7 @@ def need_split(word):
         if temp_splits[1] in split1_tails:
             return True
         if temp_splits[1] in split2_tails and temp_splits[0][-1]=='n':
-            if word not in ["-n't", "n't"]: 
+            if word not in ["-n't", "n't"]:
                 return True
     return False
 
@@ -125,7 +127,7 @@ def get_data_stats(data_dir, stat_dir):
     phone_dict = {}
 
     file_list = glob.glob(data_dir + '/word_times_sw3*.pickle') + \
-            glob.glob(data_dir + '/word_times_sw2*.pickle') 
+            glob.glob(data_dir + '/word_times_sw2*.pickle')
     for f in file_list:
         data = pickle.load(open(f))
         for k in sorted(data.keys()):
@@ -178,11 +180,11 @@ def get_data_stats(data_dir, stat_dir):
 if __name__ == '__main__':
     pa = argparse.ArgumentParser(description='Get stats on durations')
     pa.add_argument('--input_dir', help='input directory', \
-        default='/g/ssli/projects/disfluencies/forced_alignments')
+        default='/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/swbd_word_times/')
     pa.add_argument('--data_type', help='treebank or ms', \
         default='tree_aligned')
     pa.add_argument('--output_dir', help='output directory', \
-        default='/s0/ttmt001/speech_parsing/ta_features')
+        default= '/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/ta_stats/')
     args = pa.parse_args()
 
     input_dir = args.input_dir

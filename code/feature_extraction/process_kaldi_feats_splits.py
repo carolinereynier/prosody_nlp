@@ -29,9 +29,10 @@ def process_feats(args):
     print(output_dir)
 
     done_files = glob.glob(output_dir + '*')
-    done_files = [os.path.basename(x).split('.')[0] for x in done_files]tions 
+    done_files = [os.path.basename(x).split('.')[0] for x in done_files]
     if feattype == 'pitch_pov':
         numc = 3
+        print('here')
     elif feattype == 'mfcc':
         numc = 13
     else:
@@ -53,20 +54,19 @@ def process_feats(args):
             list_feats = [f.strip().split()[:numc] for f in frames]
             floated_feats = [[float(x) for x in coef] for coef in list_feats]
             feat_dict[filename] = floated_feats
-            full_name = os.path.join(output_dir, filename + '.pickle') 
+            full_name = os.path.join(output_dir, filename + '.pickle')
             pickle.dump(feat_dict, open(full_name, 'wb'))
 
 if __name__ == '__main__':
     pa = argparse.ArgumentParser(
             description='Process kaldi features')
     pa.add_argument('--split', help='split')
-    pa.add_argument('--in_dir', help='inpput directory', \
-            default='/s0/ttmt001/speech_parsing/')
+    pa.add_argument('--in_dir', help='input directory', \
+            default='/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/output_data')
     pa.add_argument('--out_dir', help='output directory', \
-            default='/s0/ttmt001/speech_parsing/')
+            default='/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/new_output')
     pa.add_argument('--feattype', help='feature type', \
             default='fbank_energy')
     args = pa.parse_args()
     process_feats(args)
     sys.exit(0)
-

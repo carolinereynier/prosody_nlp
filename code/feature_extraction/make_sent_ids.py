@@ -12,13 +12,13 @@ def extract_ids_from_time_file(infile,outfile):
             sent_id = '_'.join((conv,spk,sent_num))
             f.write(sent_id)
             f.write('\n')
-        
+
 def main():
-    in_dir = '/afs/inf.ed.ac.uk/group/project/prosody/parsing/prosody_nlp/data/trees'
-    out_dir = '/afs/inf.ed.ac.uk/group/project/prosody/parsing/prosody_nlp/data/input_features'
+    in_dir = '/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/trees'
+    out_dir = '/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/output_data/input_features'
     splits = ['train','dev','test']
     for spl in splits:
         extract_ids_from_time_file(os.path.join(in_dir,spl+'.times'),os.path.join(out_dir,spl+'_sent_ids.txt'))
-                            
+
 if __name__=="__main__":
     main()

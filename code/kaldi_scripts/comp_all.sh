@@ -1,8 +1,9 @@
 #!/bin/bash
 
-KALDI_ROOT=/afs/inf.ed.ac.uk/group/project/prosody/kaldi # kaldi location
+#KALDI_ROOT=/afs/inf.ed.ac.uk/group/teaching/asr/tools/kaldi-ubuntu
+KALDI_ROOT=/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/kaldi # kaldi location
 NUM=$1
-maindir=/afs/inf.ed.ac.uk/group/project/prosody/prosody_nlp/data/dummy # output location
+maindir=/afs/inf.ed.ac.uk/group/msc-projects/s2125019/prosody_nlp/data/output_data # output location
 sdir=/group/corporapublic/switchboard/switchboard1/swb1 # SWBD location
 
 swdir=${KALDI_ROOT}/src/featbin
@@ -19,7 +20,7 @@ sph2pipe=$KALDI_ROOT/tools/sph2pipe_v2.5/sph2pipe
   && echo "Could not execute the sph2pipe program at $sph2pipe" && exit 1;
 
 awk -v sph2pipe=$sph2pipe '{
-  printf("%s-A %s -f wav -p -c 1 %s |\n", $1, sph2pipe, $2); 
+  printf("%s-A %s -f wav -p -c 1 %s |\n", $1, sph2pipe, $2);
   printf("%s-B %s -f wav -p -c 2 %s |\n", $1, sph2pipe, $2);
 }' < sph.scp | sort > wav.scp || exit 1;
 #side A - channel 1, side B - channel 2
@@ -151,4 +152,3 @@ done > $maindir/feats.scp
 rm $logdir/wav_${name}.*.scp  2>/dev/null
 
 echo "Succeeded creating features for $name"
-

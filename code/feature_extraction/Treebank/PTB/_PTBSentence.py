@@ -1,8 +1,8 @@
 import re
 
-from Treebank.Nodes import Sentence
-from _PTBNode import PTBNode
-from _PTBLeaf import PTBLeaf
+from Nodes import Sentence
+from ._PTBNode import PTBNode
+from ._PTBLeaf import PTBLeaf
 
 class PTBSentence(PTBNode, Sentence):
     """
@@ -59,7 +59,7 @@ class PTBSentence(PTBNode, Sentence):
         try:
             self._connectNodes(nodes, parentage)
         except:
-            print sent_text
+            print(sent_text)
             raise
         by_identifier = dict((n.identifier, n) for n in top.depthList() if n.identifier)
         for node in top.depthList():

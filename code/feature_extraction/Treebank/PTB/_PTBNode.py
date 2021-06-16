@@ -1,7 +1,7 @@
 import re
 import bisect
 
-from Treebank.Nodes import Node
+from Nodes import Node
 
 
 class PTBNode(Node):
@@ -33,7 +33,7 @@ class PTBNode(Node):
             start_time = parse_time(kwargs.pop('start_time', None))
             end_time = parse_time(kwargs.pop('end_time', None))
         if kwargs:
-            raise StandardError, kwargs
+            raise(StandardError, kwargs)
         if functionLabel == 'UNF':
             functionLabel = None
             unf = True

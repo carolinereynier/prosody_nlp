@@ -1,7 +1,7 @@
-from Treebank.Nodes import Corpus
-from _PTBNode import PTBNode
-from _PTBFile import PTBFile
-from _PTBFile import NXTFile
+from Nodes import Corpus
+from ._PTBNode import PTBNode
+from ._PTBFile import PTBFile
+from ._PTBFile import NXTFile
 
 import os
 import sys

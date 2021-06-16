@@ -1,5 +1,5 @@
-from Treebank.Nodes import Leaf
-from _PTBNode import PTBNode
+from Nodes import Leaf
+from ._PTBNode import PTBNode
 
 class PTBLeaf(Leaf, PTBNode):
     def __init__(self, **kwargs):
