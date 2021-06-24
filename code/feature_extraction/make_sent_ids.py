@@ -1,9 +1,10 @@
 import pandas as pd
 import os
 
+print(pd.__version__)
 
 def extract_ids_from_time_file(infile,outfile):
-    df = pd.read_csv(infile,sep='\t')
+    df = pd.read_csv(infile,header=None, sep='\t')
 
     with open(outfile,'w') as f:
         for i,row in df.iterrows():
